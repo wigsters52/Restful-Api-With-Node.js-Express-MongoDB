@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const Post = require('../models/Post')
 
+// gets all of the posts
 router.get('/', async (req, res) => {
   try {
     const posts = await Post.find()
@@ -11,6 +12,7 @@ router.get('/', async (req, res) => {
   }
 })
 
+// submits a post
 router.post('/', async (req, res) => {
   const post = new Post({
     title: req.body.title,
@@ -24,4 +26,24 @@ router.post('/', async (req, res) => {
   }
 })
 
+// specific post get
+
+router.get('/:postId', async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.postId)
+    res.json(post)
+  } catch (err) {
+    res.json({ message: err })
+  }
+})
+// delete a specific post
+
+router.delete('/:postId', async (req, res) => {
+  try {
+    const removedPost = await Post.remove({ _id: req.params.postId })
+    res.json(removedPost)
+  } catch (err) {
+    res.json({ message: err })
+  }
+})
 module.exports = router
